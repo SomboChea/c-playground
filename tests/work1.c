@@ -54,8 +54,29 @@ int main()
 
 void read_file() {
     // read the file here...
+    FILE *file;
+    char c;
+
+    if ((file = fopen("./../data/welcome.txt", "r")) == NULL) {
+        printf("no file were found...!");
+    } else {
+        while ((c = getc(file)) != EOF)
+        {
+            printf("%c", c);
+        }
+    }
 }
 
-void menu() {
+void menu(int menu) {
     // do something here...
+    switch (menu)
+    {
+    case 1:
+        printf("1. Student details...");
+        break;
+    
+    default:
+        printf("No menu found here...!");
+        break;
+    }
 }
