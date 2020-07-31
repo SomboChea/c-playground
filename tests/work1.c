@@ -55,7 +55,6 @@ int main()
     printf("Student id: %s \n", first->student_info.id);
     printf("Course name: %s \n", first->course_info.course_name);
     printf("Course of units: %d", first->course_info.no_of_units);
-    printf("%d", first->course_info.marks);
 
     return 0;
 }
