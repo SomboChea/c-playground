@@ -1,0 +1,6 @@
+(1) Display students’ details
+(2) Search for a student’s mark
+(3) Find the details of student with the largest average
+(4) Find the details of failed students
+(5) Add new student to the record
+(6) Quit program

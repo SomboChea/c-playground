@@ -1,0 +1,6 @@
+#!/bin/bash
+
+echo "compile the program.c file..."
+gcc work1/main.c -o program
+echo "run the program..."
+./program
