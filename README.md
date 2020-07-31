@@ -1,1 +1,4 @@
-# sbn.cassigment
+# SBN C Assigement
+
+- [ ] Student Details
+- [ ] ...
