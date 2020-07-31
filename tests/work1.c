@@ -51,3 +51,11 @@ int main()
 
     return 0;
 }
+
+void read_file() {
+    // read the file here...
+}
+
+void menu() {
+    // do something here...
+}
