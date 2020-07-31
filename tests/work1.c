@@ -37,5 +37,17 @@ int main()
     printf("Hello, %s \n", person2.name);
     printf("Hello Ptr, %s \n", personPtr->name);
 
+
+    // using linkedlist
+    struct student_tag* first = NULL;
+    struct student_tag* second = NULL;
+    struct student_tag* third = NULL;
+
+    struct course_tag c1 = { "Computer", 4 };
+    struct person_tag p1 = { "Sambo", "121214" };
+    first->course_info = c1;
+    first->student_info = p1;
+    
+
     return 0;
 }
