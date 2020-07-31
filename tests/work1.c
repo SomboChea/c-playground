@@ -56,6 +56,8 @@ int main()
     printf("Course name: %s \n", first->course_info.course_name);
     printf("Course of units: %d", first->course_info.no_of_units);
 
+    read_file();
+    
     return 0;
 }
 
