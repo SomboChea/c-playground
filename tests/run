@@ -1,0 +1,4 @@
+#!/bin/bash
+
+gcc work1.c -o work1
+./work1
