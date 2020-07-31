@@ -1,5 +1,6 @@
 #include "stdio.h"
 #include "string.h"
+#include "stdlib.h"
 
 struct person_tag
 {
@@ -37,29 +38,40 @@ int main()
     printf("Hello, %s \n", person2.name);
     printf("Hello Ptr, %s \n", personPtr->name);
 
-
     // using linkedlist
-    struct student_tag* first = NULL;
-    struct student_tag* second = NULL;
-    struct student_tag* third = NULL;
+    struct student_tag *first = NULL;
+    struct student_tag *second = NULL;
+    struct student_tag *third = NULL;
 
-    struct course_tag c1 = { "Computer", 4 };
-    struct person_tag p1 = { "Sambo", "121214" };
+    first = (struct student_tage *)malloc(sizeof(struct student_tag *));
+
+    struct course_tag c1 = {"Computer", 4, {1, 2, 3, 4}};
+    struct person_tag p1 = {"Sambo", "121214"};
     first->course_info = c1;
     first->student_info = p1;
-    
+    first->next = second;
+
+    printf("Student name: %s \n", first->student_info.name);
+    printf("Student id: %s \n", first->student_info.id);
+    printf("Course name: %s \n", first->course_info.course_name);
+    printf("Course of units: %d", first->course_info.no_of_units);
+    printf("%d", first->course_info.marks);
 
     return 0;
 }
 
-void read_file() {
+void read_file()
+{
     // read the file here...
     FILE *file;
     char c;
 
-    if ((file = fopen("./../data/welcome.txt", "r")) == NULL) {
+    if ((file = fopen("./../data/welcome.txt", "r")) == NULL)
+    {
         printf("no file were found...!");
-    } else {
+    }
+    else
+    {
         while ((c = getc(file)) != EOF)
         {
             printf("%c", c);
@@ -67,14 +79,15 @@ void read_file() {
     }
 }
 
-void menu(int menu) {
+void menu(int menu)
+{
     // do something here...
     switch (menu)
     {
     case 1:
         printf("1. Student details...");
         break;
-    
+
     default:
         printf("No menu found here...!");
         break;
