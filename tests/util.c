@@ -1,14 +1,17 @@
 #include "stdio.h"
 
-void print(char *text) {
+void print(char *text)
+{
     printf(text);
 }
 
-void println(char *text) {
+void println(char *text)
+{
     newline();
     print(text);
 }
 
-void newline() {
+void newline()
+{
     printf("\n");
 }

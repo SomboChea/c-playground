@@ -58,9 +58,8 @@ int main()
     printf("Course of units: %d", first->course_info.no_of_units);
 
     read_file("./../data/welcome.txt");
-    
-    display_menu();
 
+    display_menu();
 
     newline();
 
@@ -104,32 +103,33 @@ void menu(int menu)
     }
 }
 
-
-void display_menu() {
+void display_menu()
+{
     printf("\n");
     read_file("./../note/section1.txt");
 }
 
-void display_students() {
-    
+void display_students()
+{
 }
 
-void search_student() {
-
+void search_student()
+{
 }
 
-void find_maximum() {
-
+void find_maximum()
+{
 }
 
-void find_failed() {
-
+void find_failed()
+{
 }
 
-void update_file() {
-
+void update_file()
+{
 }
 
-void exit_program() {
+void exit_program()
+{
     println("Goodbye...");
 }
