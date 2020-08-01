@@ -1,6 +1,7 @@
 #include "stdio.h"
 #include "string.h"
 #include "stdlib.h"
+#include "util.c"
 
 struct person_tag
 {
@@ -60,9 +61,12 @@ int main()
     
     display_menu();
 
-    scanf("\nenter the option: ", selected);
 
-    menu(selected);
+    newline();
+
+    // scanf("\nenter the option: ", selected);
+
+    // menu(selected);
 
     return 0;
 }
@@ -107,5 +111,25 @@ void display_menu() {
 }
 
 void display_students() {
-    printf()
+    
+}
+
+void search_student() {
+
+}
+
+void find_maximum() {
+
+}
+
+void find_failed() {
+
+}
+
+void update_file() {
+
+}
+
+void exit_program() {
+    println("Goodbye...");
 }
