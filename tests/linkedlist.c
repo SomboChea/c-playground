@@ -68,6 +68,54 @@ void add_first(int element) {
         return;
     }
 
+    // put the first element of the head
+    // because we need the old head into the next of new head
     node->next = head;
+
+    // replace the head node from current node
     head = node;
+}
+
+void add_last(int element) {
+    struct node *node, *temp;
+
+    node = (struct node*)malloc(sizeof (struct node));
+    node->data = element;
+    count++;
+
+    if (head == NULL) {
+        head = node;
+        head->next = NULL;
+        return;
+    }
+
+    // store current as tempo
+    temp = node;
+
+    while (temp->next != NULL) {
+        temp = temp->next;
+    }
+
+    temp->next = node;
+    node->next = NULL;
+}
+
+void traverse() {
+    struct node *node;
+
+    node = head;
+
+    if (node == NULL) {
+        printf("Linked list is empty!\n");
+        return;
+    }
+
+    printf("Total elements count: %d in linked list.\n", count);
+
+    while (node->next != NULL) {
+        printf("%d\n", node->data);
+        node = node->next;
+    }
+
+    printf("%d\n", node->data);
 }
