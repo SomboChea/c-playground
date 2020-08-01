@@ -24,27 +24,55 @@ int main(void)
 
     while (1)
     {
-        if (count == 100)
-        {
-            exit(EXIT_SUCCESS);
-        }
-
+        printf("\n");
+        
         // show menu
         display_menu();
-    }
 
-    printf("\nGoodbye!");
+        printf("Enter your option: ");
+        scanf("%d", &selected);
+
+        if (selected == 1)
+        {
+            printf("Enter you element to add first: ");
+            scanf("%d", &data);
+            add_first(data);
+        }
+        else if (selected == 2)
+        {
+            printf("Enter you element to add last: ");
+            scanf("%d", &data);
+            add_last(data);
+        }
+        else if (selected == 3)
+        {
+            traverse();
+        }
+        else if (selected == 4)
+        {
+            remove_first;
+        }
+        else if (selected == 5)
+        {
+            remove_last();
+        }
+        else
+        {
+            printf("\nGoodbye!");
+            exit(EXIT_SUCCESS);
+        }
+    }
     return 0;
 }
 
 void display_menu()
 {
-
     printf("1. Add first element\n");
     printf("2. Add last element\n");
     printf("3. Traverse element\n");
     printf("4. Remove first element\n");
     printf("5. Remove last element\n");
+    printf("Any to quite program\n");
 }
 
 void add_first(int element)
