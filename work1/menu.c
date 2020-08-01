@@ -15,8 +15,6 @@ void menu()
     printf("\n(6) Quit program\n\n");
 }
 
-
-
 void choose_menu(int menu)
 {
 
@@ -35,8 +33,8 @@ void choose_menu(int menu)
         find_failed_students();
         break;
     case MENU_5:
-    
-        struct person_tag info = {"1","Sambo"};
+
+        struct person_tag info = {"1", "Sambo"};
         struct student_tag std = {.student_info = info};
         add_new(std);
         break;

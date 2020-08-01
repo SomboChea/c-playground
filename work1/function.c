@@ -2,26 +2,32 @@
 #include "stdio.h"
 #include "./student_tag.h"
 
-void display() {
+void display()
+{
     printf("display...");
 }
 
-void search(int mark) {
+void search(int mark)
+{
     printf("search mark...");
 }
 
-void find_largest_average() {
+void find_largest_average()
+{
     printf("find largest average...");
 }
 
-void find_failed_students() {
+void find_failed_students()
+{
     printf("find failed students...");
 }
 
-void add_new(struct student_tag student) {
+void add_new(struct student_tag student)
+{
     printf("add new...");
 }
 
-void quite() {
+void quite()
+{
     exit(1);
 }
