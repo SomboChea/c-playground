@@ -105,3 +105,7 @@ void display_menu() {
     printf("\n");
     read_file("./../note/section1.txt");
 }
+
+void display_students() {
+    printf()
+}
