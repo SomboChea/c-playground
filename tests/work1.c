@@ -25,7 +25,7 @@ struct student_tag
 
 int main()
 {
-
+    int selected;
     struct person_tag person, person2 = {"Chea", "4567892"}, *personPtr;
 
     // strcpy style
@@ -56,18 +56,24 @@ int main()
     printf("Course name: %s \n", first->course_info.course_name);
     printf("Course of units: %d", first->course_info.no_of_units);
 
-    read_file();
+    read_file("./../data/welcome.txt");
     
+    display_menu();
+
+    scanf("enter the option: ", selected);
+
+    menu(selected);
+
     return 0;
 }
 
-void read_file()
+void read_file(char *filename)
 {
     // read the file here...
     FILE *file;
     char c;
 
-    if ((file = fopen("./../data/welcome.txt", "r")) == NULL)
+    if ((file = fopen(filename, "r")) == NULL)
     {
         printf("no file were found...!");
     }
@@ -82,7 +88,6 @@ void read_file()
 
 void menu(int menu)
 {
-    // do something here...
     switch (menu)
     {
     case 1:
@@ -93,4 +98,10 @@ void menu(int menu)
         printf("No menu found here...!");
         break;
     }
+}
+
+
+void display_menu() {
+    printf("\n");
+    read_file("./../note/section1.txt");
 }
