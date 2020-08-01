@@ -60,7 +60,7 @@ int main()
     
     display_menu();
 
-    scanf("enter the option: ", selected);
+    scanf("\nenter the option: ", selected);
 
     menu(selected);
 
