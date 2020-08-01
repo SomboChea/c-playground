@@ -1,7 +1,8 @@
 #include "stdio.h"
 #include "stdlib.h"
 
-struct node {
+struct node
+{
     int data;
     struct node *next;
 };
@@ -15,13 +16,16 @@ void remove_last();
 int count = 0;
 void display_menu();
 
-int main(void) {
+int main(void)
+{
     printf("Welcome!\n");
 
     int selected, data;
 
-    while (1) {
-        if (count == 100) {
+    while (1)
+    {
+        if (count == 100)
+        {
             exit(EXIT_SUCCESS);
         }
 
@@ -33,22 +37,23 @@ int main(void) {
     return 0;
 }
 
-void display_menu() {
+void display_menu()
+{
 
     printf("1. Add first element\n");
     printf("2. Add last element\n");
     printf("3. Traverse element\n");
     printf("4. Remove first element\n");
     printf("5. Remove last element\n");
-
 }
 
-void add_first(int element) {
+void add_first(int element)
+{
     // init node
     struct node *node;
 
     // allocate the node for linkedlist
-    node = (struct node*)malloc(sizeof(struct node));
+    node = (struct node *)malloc(sizeof(struct node));
 
     // add the data into node
     node->data = element;
@@ -57,7 +62,8 @@ void add_first(int element) {
     count++;
 
     // check the head, if null put the data into it
-    if (head == NULL) {
+    if (head == NULL)
+    {
         // replace the node into head
         head = node;
 
@@ -76,14 +82,16 @@ void add_first(int element) {
     head = node;
 }
 
-void add_last(int element) {
+void add_last(int element)
+{
     struct node *node, *temp;
 
-    node = (struct node*)malloc(sizeof (struct node));
+    node = (struct node *)malloc(sizeof(struct node));
     node->data = element;
     count++;
 
-    if (head == NULL) {
+    if (head == NULL)
+    {
         head = node;
         head->next = NULL;
         return;
@@ -92,7 +100,8 @@ void add_last(int element) {
     // store current as tempo
     temp = node;
 
-    while (temp->next != NULL) {
+    while (temp->next != NULL)
+    {
         temp = temp->next;
     }
 
@@ -100,22 +109,82 @@ void add_last(int element) {
     node->next = NULL;
 }
 
-void traverse() {
+void traverse()
+{
     struct node *node;
 
     node = head;
 
-    if (node == NULL) {
+    if (node == NULL)
+    {
         printf("Linked list is empty!\n");
         return;
     }
 
     printf("Total elements count: %d in linked list.\n", count);
 
-    while (node->next != NULL) {
+    while (node->next != NULL)
+    {
         printf("%d\n", node->data);
         node = node->next;
     }
 
     printf("%d\n", node->data);
+}
+
+void remove_first()
+{
+    struct node *node;
+    int data;
+
+    if (head == NULL)
+    {
+        printf("No elements found!\n");
+        return;
+    }
+
+    data = head->data;
+    node = head->next;
+    free(head);
+    head = node;
+    count--;
+
+    printf("Element %d has been removed from first!\n", data);
+}
+
+void remove_last()
+{
+    struct node *node, *temp;
+    int data;
+
+    if (head == NULL)
+    {
+        printf("No elements found!\n");
+        return;
+    }
+
+    count--;
+
+    if (head->next == NULL)
+    {
+        data = head->data;
+        free(head);
+        head = NULL;
+        printf("Element %d has been removed from last!\n");
+        return;
+    }
+
+    node = head;
+
+    while (node->next != NULL)
+    {
+        temp = node;
+        node = node->next;
+    }
+
+    data = node->data;
+    temp->next = NULL;
+    free(node);
+
+    printf("Element %d has been removed from last!\n");
 }
