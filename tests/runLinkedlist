@@ -1,0 +1,7 @@
+#!/bin/bash
+
+rm -r linkedlist
+
+gcc linkedlist.c -o linkedlist
+
+./linkedlist
