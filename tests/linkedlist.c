@@ -25,7 +25,7 @@ int main(void)
     while (1)
     {
         printf("\n");
-        
+
         // show menu
         display_menu();
 
@@ -122,11 +122,13 @@ void add_last(int element)
     {
         head = node;
         head->next = NULL;
+
+        printf("Element %d has been add into first/last!\n", element);
         return;
     }
 
     // store current as tempo
-    temp = node;
+    temp = head;
 
     while (temp->next != NULL)
     {
@@ -134,7 +136,8 @@ void add_last(int element)
     }
 
     temp->next = node;
-    node->next = NULL;
+    node->next = NULL;    
+    head = temp;
 }
 
 void traverse()
