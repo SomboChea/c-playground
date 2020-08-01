@@ -98,6 +98,8 @@ void add_first(int element)
         // set the next of head into null
         head->next = NULL;
 
+        printf("Element %d has been added into the first!", element);
+
         // return or end this process
         return;
     }
@@ -108,6 +110,8 @@ void add_first(int element)
 
     // replace the head node from current node
     head = node;
+
+    printf("Element %d has been added into the first!", element);
 }
 
 void add_last(int element)
@@ -136,7 +140,7 @@ void add_last(int element)
     }
 
     temp->next = node;
-    node->next = NULL;    
+    node->next = NULL;
     head = temp;
 }
 
