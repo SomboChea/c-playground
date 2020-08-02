@@ -271,6 +271,10 @@ STUDENT *find_maximum_avg()
         temp = temp->next;
     }
 
+    // set max next element to NULL
+    // because we use only one record
+    max->next = NULL;
+
     return max;
 }
 
