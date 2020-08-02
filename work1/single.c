@@ -40,6 +40,7 @@ void print_welcome();
 void print_student(STUDENT *student);
 void release(STUDENT *data);
 STUDENT *search_student_by_name_or_id(char search_key[NAME_SIZE]);
+STUDENT *find_maximum_avg();
 
 // core functions
 void display_students();
@@ -249,9 +250,40 @@ STUDENT *search_student_by_name_or_id(char search_key[NAME_SIZE])
     return NULL;
 }
 
+STUDENT *find_maximum_avg()
+{
+    STUDENT *temp = head, *max;
+    max = temp->next;
+
+    while (temp != NULL)
+    {
+        if (max == NULL)
+        {
+            return temp;
+        }
+
+        if (max->course_info.avg < temp->course_info.avg)
+        {
+            max = temp;
+        }
+
+        temp = temp->next;
+    }
+
+    return max;
+}
+
 void find_maximum()
 {
-    printf("\nNot implement yet!");
+    STUDENT *max_student = find_maximum_avg();
+    if (max_student == NULL)
+    {
+        printf("No student found!");
+        return;
+    }
+
+    printf("\nFind maximum avg was found with: %0.2f\n", max_student->course_info.avg);
+    print_student(max_student);
 }
 
 void find_failed()
