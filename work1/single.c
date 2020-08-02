@@ -58,13 +58,33 @@ int main(void)
 
     display_menu();
 
-    display_students();
+    printf("Enter your option: ");
+    scanf("%d", &selected);
 
-    int c = count();
-
-    printf("Count: %d", c);
-
-    printf("\nGoodbye!");
+    switch (selected)
+    {
+    case 1:
+        display_students();
+        break;
+    case 2:
+        search_student();
+        break;
+    case 3:
+        find_maximum();
+        break;
+    case 4:
+        find_failed();
+        break;
+    case 5:
+        update_file();
+        break;
+    case 6:
+        quite();
+        break;
+    default:
+        printf("cannot find your option!");
+        break;
+    }
 }
 
 void print_welcome()
@@ -118,12 +138,6 @@ void add_student(char *student_name, char *student_id, char *course_name, int no
         temp->next = NULL;
         iterator->next = temp;
     }
-}
-
-void update_file()
-{
-    FILE *file;
-    file = fopen(FILE_STUDENT_DATA_PATH, "a");
 }
 
 void read_student_to_data()
@@ -225,4 +239,37 @@ int count()
     }
 
     return n;
+}
+
+void search_student()
+{
+    printf("\nNot implement yet!");
+}
+
+void find_maximum()
+{
+    printf("\nNot implement yet!");
+}
+
+void find_failed()
+{
+    printf("\nNot implement yet!");
+}
+
+void update_file()
+{
+    FILE *file;
+    file = fopen(FILE_STUDENT_DATA_PATH, "a");
+    printf("\nNot implement yet!");
+}
+
+void read_file()
+{
+    printf("\nNot implement yet!");
+}
+
+void quite()
+{
+    printf("\nGoodbye!");
+    exit(EXIT_SUCCESS);
 }
