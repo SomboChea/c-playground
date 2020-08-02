@@ -3,7 +3,7 @@
 
 #define BUFFER_SIZE 128
 
-const char *FILE_STUDENT_DATA_PATH = "./data/students.txt";
+const char *FILE_STUDENT_DATA_PATH = "./data/students.test.txt";
 
 struct person_tag
 {
@@ -56,13 +56,12 @@ int main(void)
 
     print_welcome();
 
-    display_menu();
-
     while (1)
     {
+        display_menu();
         printf("Enter your option: ");
         scanf("%d", &selected);
-        
+
         switch (selected)
         {
         case 1:
@@ -264,7 +263,53 @@ void update_file()
 {
     FILE *file;
     file = fopen(FILE_STUDENT_DATA_PATH, "a");
-    printf("\nNot implement yet!");
+
+    char name[20];
+    char id[10];
+    char course_name[20];
+    int no_of_units;
+    int marks[4];
+
+    printf("Enter student name: ");
+    scanf("%s", &name);
+
+    printf("Enter student id: ");
+    scanf("%s", &id);
+
+    printf("Enter course name: ");
+    scanf("%s", &course_name);
+
+    printf("Enter no of units: ");
+    scanf("%d", &no_of_units);
+
+    for (int i = 0; i < no_of_units; i++)
+    {
+        printf("Enter mark[%d]: ", i + 1);
+        scanf("%d", &marks[i]);
+    }
+
+    if (count() > 0)
+    {
+        fputs("\n", file);
+    }
+    
+    fputs(name, file);
+    fputs("\n", file);
+    fputs(id, file);
+    fputs("\n", file);
+    fputs(course_name, file);
+    fputs("\n", file);
+    fprintf(file, "%d", no_of_units);
+
+    for (int i = 0; i < no_of_units; i++)
+    {
+        fputs("\n", file);
+        fprintf(file, "%d", marks[i]);
+    }
+
+    fclose(file);
+
+    printf("\nSaved");
 }
 
 void read_file()
