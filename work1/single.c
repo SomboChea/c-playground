@@ -114,12 +114,12 @@ void display_students()
         return;
     }
 
-    printf("\n================ Student Details ================\n");
     print_student(student);
 }
 
 void print_student(STUDENT *student)
 {
+    printf("\n================ Student Details ================\n");
     while (student != NULL)
     {
         printf("\n");
@@ -238,8 +238,9 @@ STUDENT *search_student_by_name_or_id(char search_key[NAME_SIZE])
 
     while (temp != NULL)
     {
-        if (temp->student_info.name == search_key || temp->student_info.id == search_key)
+        if (strcmp(temp->student_info.name, search_key) == 0 || strcmp(temp->student_info.id, search_key) == 0)
         {
+            printf("\nSearch found with key: %s\n", search_key);
             return temp;
         }
         temp = temp->next;
