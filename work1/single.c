@@ -244,12 +244,7 @@ void read_student_to_data()
         }
 
         course_name[i] = '\0';
-
-        // printf("Student Name: %s\n", student_name);
-        // printf("Student ID: %s\n", student_id);
-        // printf("Course Name: %s\n", course_name);
-        // printf("No of units: %s", no);
-
+        
         no_of_units = atoi(no);
         for (int j = 0; j < no_of_units; j++)
         {
@@ -258,13 +253,6 @@ void read_student_to_data()
             fgets(mark, sizeof mark, file);
             sscanf(mark, "%d", &marks[j]);
         }
-
-        // printf("Marks: [ ");
-        // for (int x = 0; x < no_of_units; x++)
-        // {
-        //     printf("%d ", marks[x]);
-        // }
-        // printf("]\n\n");
 
         // add into linked list
         add_student(student_name, student_id, course_name, no_of_units, marks);
