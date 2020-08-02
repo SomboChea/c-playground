@@ -236,6 +236,9 @@ void search_student()
 
 STUDENT *search_student_by_name_or_id(char search_key[NAME_SIZE])
 {
+    // refresh data from file first
+    read_file();
+
     STUDENT *temp = head;
 
     while (temp != NULL)
@@ -253,6 +256,9 @@ STUDENT *search_student_by_name_or_id(char search_key[NAME_SIZE])
 
 STUDENT *find_maximum_avg()
 {
+    // refresh data from file first
+    read_file();
+
     STUDENT *temp = head, *max;
     max = temp->next;
 
@@ -271,8 +277,10 @@ STUDENT *find_maximum_avg()
         temp = temp->next;
     }
 
+    // release the max next record
     // set max next element to NULL
     // because we use only one record
+    release(max->next);
     max->next = NULL;
 
     return max;
@@ -300,6 +308,9 @@ int find_min_in_array(int *array)
 
 STUDENT *find_failed_mark(int upper_mark)
 {
+    // refresh data from file first
+    read_file();
+    
     STUDENT *temp = head, *failed_students = NULL;
 
     while (temp != NULL)
