@@ -299,7 +299,8 @@ void read_file()
     // we need to clear it first
     // before we re-initailize the new data
     STUDENT *temp;
-    while (head != NULL) {
+    while (head != NULL)
+    {
         temp = head;
         head = head->next;
         free(temp);
