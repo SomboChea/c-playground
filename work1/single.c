@@ -2,6 +2,7 @@
 #include "stdlib.h"
 
 #define BUFFER_SIZE 128
+#define MAX_NO_OF_UNITS 4
 
 const char *FILE_STUDENT_DATA_PATH = "./data/students.test.txt";
 
@@ -15,7 +16,7 @@ struct course_tag
 {
     char course_name[20];
     int no_of_units;
-    int marks[4];
+    int marks[MAX_NO_OF_UNITS];
     float avg;
 };
 
@@ -41,7 +42,7 @@ void read_file();
 void quite();
 
 // Linked list functions
-void add_student(char student_name[20], char student_id[10], char course_name[20], int no_of_units, int marks[4]);
+void add_student(char student_name[20], char student_id[10], char course_name[20], int no_of_units, int marks[MAX_NO_OF_UNITS]);
 int count();
 
 // util functions
@@ -110,10 +111,13 @@ void display_students()
         return;
     }
 
+    printf("\n================ Student Details ================\n");
+
     print_student(student);
 
     while (student->next != NULL)
     {
+        printf("\n");
         student = student->next;
         print_student(student);
     }
@@ -145,7 +149,7 @@ void display_menu()
     printf("(6) Quit program\n\n");
 }
 
-void add_student(char student_name[20], char student_id[10], char course_name[20], int no_of_units, int marks[4])
+void add_student(char student_name[20], char student_id[10], char course_name[20], int no_of_units, int marks[MAX_NO_OF_UNITS])
 {
     STUDENT *temp, *iterator;
     temp = (struct student_tag *)malloc(sizeof(struct student_tag));
@@ -312,7 +316,7 @@ void update_file()
     char id[10];
     char course_name[20];
     int no_of_units;
-    int marks[4];
+    int marks[MAX_NO_OF_UNITS];
 
     printf("Enter student name: ");
     scanf("%s", &name);
@@ -323,8 +327,15 @@ void update_file()
     printf("Enter course name: ");
     scanf("%s", &course_name);
 
+    again:
     printf("Enter no of units: ");
     scanf("%d", &no_of_units);
+
+    if (no_of_units > MAX_NO_OF_UNITS) {
+        printf("you cannot input the units bigger than %d\n", MAX_NO_OF_UNITS);
+        getchar();
+        goto again;
+    }
 
     for (int i = 0; i < no_of_units; i++)
     {
