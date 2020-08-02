@@ -17,7 +17,7 @@ struct student_tag {
     struct person_tag student_info;
     struct course_tag course_info;
     struct student_tag *next;
-}
+};
 
 void display_students(void);
 void search_student(void);
