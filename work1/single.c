@@ -32,6 +32,11 @@ typedef struct person_tag PERSON;
 typedef struct course_tag COURSE;
 typedef struct student_tag STUDENT;
 
+// util functions
+void display_menu();
+void print_welcome();
+void print_student(STUDENT *student);
+
 // core functions
 void display_students();
 void search_student();
@@ -45,17 +50,15 @@ void quite();
 void add_student(char student_name[20], char student_id[10], char course_name[20], int no_of_units, int marks[MAX_NO_OF_UNITS]);
 int count();
 
-// util functions
-void display_menu();
-void read_student_to_data();
-void print_welcome();
-
 int main(void)
 {
     // variable use for menu selected
     int selected;
 
     print_welcome();
+
+    // init the read data from the file
+    read_file();
 
     while (1)
     {
@@ -99,7 +102,7 @@ void display_students()
 {
     printf("\n");
 
-    read_student_to_data();
+    read_file();
 
     STUDENT *student;
 
@@ -191,76 +194,6 @@ void add_student(char student_name[20], char student_id[10], char course_name[20
     }
 }
 
-void read_student_to_data()
-{
-    // init head to null
-    head = NULL;
-
-    FILE *file;
-    file = fopen(FILE_STUDENT_DATA_PATH, "r");
-
-    if (file == NULL)
-    {
-        printf("cannot read file: %s", FILE_STUDENT_DATA_PATH);
-        exit(EXIT_FAILURE);
-    }
-
-    char student_name[20];
-    char student_id[10];
-    char course_name[20];
-    int no_of_units;
-    int marks[4];
-
-    int i;
-    while (!feof(file))
-    {
-        char no[BUFFER_SIZE];
-
-        fgets(student_name, sizeof student_name, file);
-        fgets(student_id, sizeof student_id, file);
-        fgets(course_name, sizeof course_name, file);
-        fgets(no, sizeof no, file);
-
-        i = 0;
-        while (student_name[i] != '\n')
-        {
-            i++;
-        }
-
-        student_name[i] = '\0';
-
-        i = 0;
-        while (student_id[i] != '\n')
-        {
-            i++;
-        }
-
-        student_id[i] = '\0';
-
-        i = 0;
-        while (course_name[i] != '\n')
-        {
-            i++;
-        }
-
-        course_name[i] = '\0';
-        
-        no_of_units = atoi(no);
-        for (int j = 0; j < no_of_units; j++)
-        {
-            char mark[BUFFER_SIZE];
-
-            fgets(mark, sizeof mark, file);
-            sscanf(mark, "%d", &marks[j]);
-        }
-
-        // add into linked list
-        add_student(student_name, student_id, course_name, no_of_units, marks);
-    }
-
-    fclose(file);
-}
-
 int count()
 {
     int n = 1;
@@ -315,11 +248,12 @@ void update_file()
     printf("Enter course name: ");
     scanf("%s", &course_name);
 
-    again:
+again:
     printf("Enter no of units: ");
     scanf("%d", &no_of_units);
 
-    if (no_of_units > MAX_NO_OF_UNITS) {
+    if (no_of_units > MAX_NO_OF_UNITS)
+    {
         printf("you cannot input the units bigger than %d\n", MAX_NO_OF_UNITS);
         getchar();
         goto again;
@@ -357,7 +291,72 @@ void update_file()
 
 void read_file()
 {
-    printf("\nNot implement yet!");
+    // init head to null
+    head = NULL;
+
+    FILE *file;
+    file = fopen(FILE_STUDENT_DATA_PATH, "r");
+
+    if (file == NULL)
+    {
+        printf("cannot read file: %s", FILE_STUDENT_DATA_PATH);
+        exit(EXIT_FAILURE);
+    }
+
+    char student_name[20];
+    char student_id[10];
+    char course_name[20];
+    int no_of_units;
+    int marks[4];
+
+    int i;
+    while (!feof(file))
+    {
+        char no[BUFFER_SIZE];
+
+        fgets(student_name, sizeof student_name, file);
+        fgets(student_id, sizeof student_id, file);
+        fgets(course_name, sizeof course_name, file);
+        fgets(no, sizeof no, file);
+
+        i = 0;
+        while (student_name[i] != '\n')
+        {
+            i++;
+        }
+
+        student_name[i] = '\0';
+
+        i = 0;
+        while (student_id[i] != '\n')
+        {
+            i++;
+        }
+
+        student_id[i] = '\0';
+
+        i = 0;
+        while (course_name[i] != '\n')
+        {
+            i++;
+        }
+
+        course_name[i] = '\0';
+
+        no_of_units = atoi(no);
+        for (int j = 0; j < no_of_units; j++)
+        {
+            char mark[BUFFER_SIZE];
+
+            fgets(mark, sizeof mark, file);
+            sscanf(mark, "%d", &marks[j]);
+        }
+
+        // add into linked list
+        add_student(student_name, student_id, course_name, no_of_units, marks);
+    }
+
+    fclose(file);
 }
 
 void quite()
