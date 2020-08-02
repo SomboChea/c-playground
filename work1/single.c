@@ -34,6 +34,9 @@ typedef struct person_tag PERSON;
 typedef struct course_tag COURSE;
 typedef struct student_tag STUDENT;
 
+// file function
+void read_file();
+
 // util functions
 void display_menu();
 void print_welcome();
@@ -49,7 +52,6 @@ void search_student();
 void find_maximum();
 void find_failed();
 void update_file();
-void read_file();
 void quite();
 
 // Linked list functions
@@ -310,7 +312,7 @@ STUDENT *find_failed_mark(int upper_mark)
 {
     // refresh data from file first
     read_file();
-    
+
     STUDENT *temp = head, *failed_students = NULL;
 
     while (temp != NULL)
@@ -338,9 +340,11 @@ STUDENT *find_failed_mark(int upper_mark)
 
     return failed_students;
 }
-
 void find_maximum()
 {
+    // refresh data from file first
+    read_file();
+
     STUDENT *max_student = find_maximum_avg();
     if (max_student == NULL)
     {
