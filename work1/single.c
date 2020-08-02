@@ -19,16 +19,29 @@ struct student_tag {
     struct student_tag *next;
 };
 
-void display_students(void);
-void search_student(void);
-void find_maximum(void);
-void find_failed(void);
+// core functions
+void display_students();
+void search_student();
+void find_maximum();
+void find_failed();
 void update_file();
 void read_file();
 void quite();
+
+// util functions
+void display_menu();
 
 int main(void) {
     printf("Welcome!");
 
     printf("Goodbye!");
+}
+
+void display_menu() {
+    printf("(1) Display students’ details\n");
+    printf("(2) Search for a student’s mark\n");
+    printf("(3) Find the details of student with the largest average\n");
+    printf("(4) Find the details of failed students\n");
+    printf("(5) Add new student to the record\n");
+    printf("(6) Quit program\n");
 }
