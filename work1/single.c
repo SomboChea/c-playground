@@ -39,6 +39,7 @@ void display_menu();
 void print_welcome();
 void print_student(STUDENT *student);
 void release(STUDENT *data);
+int find_min_in_array(int *array);
 STUDENT *search_student_by_name_or_id(char search_key[NAME_SIZE]);
 STUDENT *find_maximum_avg();
 
@@ -273,12 +274,58 @@ STUDENT *find_maximum_avg()
     return max;
 }
 
+int find_min_in_array(int *array)
+{
+    if (array == NULL)
+    {
+        return -1;
+    }
+
+    int min = array[0];
+    for (int i = 1; i < sizeof array; i++)
+    {
+        if (array[i] < min)
+        {
+            min = array[i];
+        }
+    }
+    return min;
+}
+
+STUDENT *find_failed_mark(int upper_mark)
+{
+    STUDENT *temp = head, *failed_students = NULL;
+
+    while (temp != NULL)
+    {
+        if (find_min_in_array(temp->course_info.marks) < upper_mark)
+        {
+            if (failed_students == NULL)
+            {
+                failed_students = temp;
+                failed_students->next = NULL;
+            }
+            else
+            {
+                while (failed_students->next != NULL)
+                {
+                    failed_students = failed_students->next;
+                }
+                failed_students->next = temp;
+            }
+        }
+        temp = temp->next;
+    }
+
+    return failed_students;
+}
+
 void find_maximum()
 {
     STUDENT *max_student = find_maximum_avg();
     if (max_student == NULL)
     {
-        printf("No student found!");
+        printf("No maximum student found!");
         return;
     }
 
@@ -288,7 +335,16 @@ void find_maximum()
 
 void find_failed()
 {
-    printf("\nNot implement yet!");
+    int upper_mark = 50;
+    STUDENT *failed_students = find_failed_mark(upper_mark);
+    if (failed_students == NULL)
+    {
+        printf("No failed student found!");
+        return;
+    }
+
+    printf("\nFind the failed students that at least one mark less than %d\n", upper_mark);
+    print_student(failed_students);
 }
 
 void update_file()
