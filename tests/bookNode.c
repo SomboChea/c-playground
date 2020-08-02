@@ -31,7 +31,7 @@ int main()
 
     // add book data
     add_book_data();
-    
+
     // display the books
     display();
 
@@ -230,8 +230,9 @@ void print_data(BOOK *book)
     while (temp->next != NULL)
     {
         temp = temp->next;
-        printf("\nBook title: %s\n", temp->title);
+        printf("\n\n============ %s ============\n", temp->title);
         printf("Book title: %s\n", temp->title);
-        printf("Book title: %s", temp->title);
+        printf("Book author: %s\n", temp->author);
+        printf("Book isbn: %s", temp->isbn);
     }
 }
