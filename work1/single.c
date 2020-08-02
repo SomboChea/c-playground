@@ -4,6 +4,7 @@
 
 #define BUFFER_SIZE 128
 #define MAX_NO_OF_UNITS 4
+#define NAME_SIZE 20
 
 const char *FILE_STUDENT_DATA_PATH = "./data/students.test.txt";
 
@@ -37,6 +38,8 @@ typedef struct student_tag STUDENT;
 void display_menu();
 void print_welcome();
 void print_student(STUDENT *student);
+void release(STUDENT *data);
+STUDENT *search_student_by_name_or_id(char search_key[NAME_SIZE]);
 
 // core functions
 void display_students();
@@ -101,13 +104,9 @@ void print_welcome()
 
 void display_students()
 {
-    printf("\n");
-
     read_file();
 
-    STUDENT *student;
-
-    student = head;
+    STUDENT *student = head;
 
     if (student == NULL)
     {
@@ -116,31 +115,33 @@ void display_students()
     }
 
     printf("\n================ Student Details ================\n");
-
     print_student(student);
-
-    while (student->next != NULL)
-    {
-        printf("\n");
-        student = student->next;
-        print_student(student);
-    }
 }
 
 void print_student(STUDENT *student)
 {
-    printf("Student Name: %s\n", student->student_info.name);
-    printf("Student ID: %s\n", student->student_info.id);
-    printf("Course Name: %s\n", student->course_info.course_name);
-    printf("No of units: %d\n", student->course_info.no_of_units);
-
-    printf("Marks: [ ");
-    for (int i = 0; i < student->course_info.no_of_units; i++)
+    while (student != NULL)
     {
-        printf("%d ", student->course_info.marks[i]);
+        printf("\n");
+        printf("Student Name: %s\n", student->student_info.name);
+        printf("Student ID: %s\n", student->student_info.id);
+        printf("Course Name: %s\n", student->course_info.course_name);
+        printf("No of units: %d\n", student->course_info.no_of_units);
+
+        printf("Marks: [ ");
+        for (int i = 0; i < student->course_info.no_of_units; i++)
+        {
+            printf("%d ", student->course_info.marks[i]);
+        }
+        printf("]\n");
+        printf("Avg: %.2f\n", student->course_info.avg);
+        student = student->next;
     }
-    printf("]\n");
-    printf("Avg: %.2f\n", student->course_info.avg);
+
+    // clean up the memory
+    // after output the data
+    // because we don;t need it anymore after output
+    release(student);
 }
 
 void display_menu()
@@ -216,7 +217,35 @@ int count()
 
 void search_student()
 {
-    printf("\nNot implement yet!");
+    char search_key[NAME_SIZE];
+
+    printf("Enter student name or id to search: ");
+    scanf("%s", &search_key);
+
+    STUDENT *found_student = search_student_by_name_or_id(search_key);
+    if (found_student == NULL)
+    {
+        printf("No student found!");
+        return;
+    }
+
+    print_student(found_student);
+}
+
+STUDENT *search_student_by_name_or_id(char search_key[NAME_SIZE])
+{
+    STUDENT *temp = head;
+
+    while (temp != NULL)
+    {
+        if (temp->student_info.name == search_key || temp->student_info.id == search_key)
+        {
+            return temp;
+        }
+        temp = temp->next;
+    }
+
+    return NULL;
 }
 
 void find_maximum()
@@ -253,9 +282,9 @@ again:
     printf("Enter no of units: ");
     scanf("%d", &no_of_units);
 
-    if (no_of_units > MAX_NO_OF_UNITS)
+    if (no_of_units > MAX_NO_OF_UNITS && no_of_units <= 0)
     {
-        printf("you cannot input the units bigger than %d\n", MAX_NO_OF_UNITS);
+        printf("you cannot input the units bigger than %d or less than 0\n", MAX_NO_OF_UNITS);
         getchar();
         goto again;
     }
@@ -295,16 +324,17 @@ again:
 
 void read_file()
 {
-    // free the nodes
-    // because it can be use in memory
-    // we need to clear it first
-    // before we re-initailize the new data
-    STUDENT *temp;
-    while (head != NULL)
+    // release nodes
+    // we need to clean up the memory
+    if (head != NULL)
     {
-        temp = head;
-        head = head->next;
-        free(temp);
+        STUDENT *temp;
+        while (head != NULL)
+        {
+            temp = head;
+            head = head->next;
+            free(temp);
+        }
     }
 
     FILE *file;
@@ -376,4 +406,24 @@ void quite()
 {
     printf("\nGoodbye!");
     exit(EXIT_SUCCESS);
+}
+
+void release(STUDENT *data)
+{
+    if (data == NULL)
+    {
+        return;
+    }
+
+    // free the nodes
+    // because it can be use in memory
+    // we need to clear it first
+    // before we re-initailize the new data
+    STUDENT *temp;
+    while (data != NULL)
+    {
+        temp = data;
+        data = data->next;
+        free(temp);
+    }
 }
