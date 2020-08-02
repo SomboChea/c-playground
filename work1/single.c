@@ -1,5 +1,6 @@
 #include "stdio.h"
 #include "stdlib.h"
+#include "string.h"
 
 #define BUFFER_SIZE 128
 #define MAX_NO_OF_UNITS 4
@@ -157,11 +158,11 @@ void add_student(char student_name[20], char student_id[10], char course_name[20
     STUDENT *temp, *iterator;
     temp = (struct student_tag *)malloc(sizeof(struct student_tag));
     PERSON info;
-    strncpy(info.name, student_name, 20);
-    strncpy(info.id, student_id, 10);
+    memcpy(info.name, student_name, 20);
+    memcpy(info.id, student_id, 10);
 
     COURSE course;
-    strncpy(course.course_name, course_name, 20);
+    memcpy(course.course_name, course_name, 20);
     course.no_of_units = no_of_units;
     // memcpy(course.marks, marks);
 
