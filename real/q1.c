@@ -1,7 +1,10 @@
 #include "stdio.h"
 #include "stdlib.h"
+#include "string.h"
 
 #define BUFFER_SIZE 128
+#define MAX_NO_OF_UNITS 4
+#define NAME_SIZE 20
 
 const char *FILE_STUDENT_DATA_PATH = "./students.txt";
 
@@ -15,7 +18,7 @@ struct course_tag
 {
     char course_name[20];
     int no_of_units;
-    int marks[4];
+    int marks[MAX_NO_OF_UNITS];
     float avg;
 };
 
@@ -31,23 +34,29 @@ typedef struct person_tag PERSON;
 typedef struct course_tag COURSE;
 typedef struct student_tag STUDENT;
 
+// file function
+void read_file();
+
+// util functions
+void display_menu();
+void print_welcome();
+void print_student(STUDENT *student);
+void release(STUDENT *data);
+int find_min_in_array(int *array);
+STUDENT *search_student_by_name_or_id(char search_key[NAME_SIZE]);
+STUDENT *find_maximum_avg();
+
 // core functions
 void display_students();
 void search_student();
 void find_maximum();
 void find_failed();
 void update_file();
-void read_file();
 void quite();
 
 // Linked list functions
-void add_student(char *student_name, char *student_id, char *course_name, int no_of_units, int *marks);
+void add_student(char student_name[20], char student_id[10], char course_name[20], int no_of_units, int marks[MAX_NO_OF_UNITS]);
 int count();
-
-// util functions
-void display_menu();
-void read_student_to_data();
-void print_welcome();
 
 int main(void)
 {
@@ -56,34 +65,39 @@ int main(void)
 
     print_welcome();
 
-    display_menu();
+    // init the read data from the file
+    read_file();
 
-    printf("Enter your option: ");
-    scanf("%d", &selected);
-
-    switch (selected)
+    while (1)
     {
-    case 1:
-        display_students();
-        break;
-    case 2:
-        search_student();
-        break;
-    case 3:
-        find_maximum();
-        break;
-    case 4:
-        find_failed();
-        break;
-    case 5:
-        update_file();
-        break;
-    case 6:
-        quite();
-        break;
-    default:
-        printf("cannot find your option!");
-        break;
+        display_menu();
+        printf("Enter your option: ");
+        scanf("%d", &selected);
+
+        switch (selected)
+        {
+        case 1:
+            display_students();
+            break;
+        case 2:
+            search_student();
+            break;
+        case 3:
+            find_maximum();
+            break;
+        case 4:
+            find_failed();
+            break;
+        case 5:
+            update_file();
+            break;
+        case 6:
+            quite();
+            break;
+        default:
+            printf("cannot find your option!");
+            break;
+        }
     }
 }
 
@@ -94,7 +108,44 @@ void print_welcome()
 
 void display_students()
 {
-    read_student_to_data();
+    read_file();
+
+    STUDENT *student = head;
+
+    if (student == NULL)
+    {
+        printf("\nNo student!\n");
+        return;
+    }
+
+    print_student(student);
+}
+
+void print_student(STUDENT *student)
+{
+    printf("\n================ Student Details ================\n");
+    while (student != NULL)
+    {
+        printf("\n");
+        printf("Student Name: %s\n", student->student_info.name);
+        printf("Student ID: %s\n", student->student_info.id);
+        printf("Course Name: %s\n", student->course_info.course_name);
+        printf("No of units: %d\n", student->course_info.no_of_units);
+
+        printf("Marks: [ ");
+        for (int i = 0; i < student->course_info.no_of_units; i++)
+        {
+            printf("%d ", student->course_info.marks[i]);
+        }
+        printf("]\n");
+        printf("Avg: %.2f\n", student->course_info.avg);
+        student = student->next;
+    }
+
+    // clean up the memory
+    // after output the data
+    // because we don;t need it anymore after output
+    release(student);
 }
 
 void display_menu()
@@ -107,20 +158,29 @@ void display_menu()
     printf("(6) Quit program\n\n");
 }
 
-void add_student(char *student_name, char *student_id, char *course_name, int no_of_units, int *marks)
+void add_student(char student_name[20], char student_id[10], char course_name[20], int no_of_units, int marks[MAX_NO_OF_UNITS])
 {
     STUDENT *temp, *iterator;
     temp = (struct student_tag *)malloc(sizeof(struct student_tag));
-    PERSON info = {student_name, student_id};
-    COURSE course = {course_name, no_of_units, marks};
-    int sum = 0;
+    PERSON info;
+    memcpy(info.name, student_name, 20);
+    memcpy(info.id, student_id, 10);
+
+    COURSE course;
+    memcpy(course.course_name, course_name, 20);
+    course.no_of_units = no_of_units;
+    // memcpy(course.marks, marks);
+
+    float sum = 0;
     for (int i = 0; i < no_of_units; i++)
     {
+        course.marks[i] = marks[i];
         sum += marks[i];
     }
     course.avg = sum / no_of_units;
     temp->student_info = info;
     temp->course_info = course;
+
     // reference in head
     iterator = head;
 
@@ -140,10 +200,256 @@ void add_student(char *student_name, char *student_id, char *course_name, int no
     }
 }
 
-void read_student_to_data()
+int count()
 {
-    // init head to null
-    head = NULL;
+    int n = 1;
+    STUDENT *temp;
+    temp = head;
+    if (head == NULL)
+    {
+        return 0;
+    }
+
+    while (temp->next != NULL)
+    {
+        n++;
+        temp = temp->next;
+    }
+
+    return n;
+}
+
+void search_student()
+{
+    char search_key[NAME_SIZE];
+
+    printf("Enter student name or id to search: ");
+    scanf("%s", &search_key);
+
+    STUDENT *found_student = search_student_by_name_or_id(search_key);
+    if (found_student == NULL)
+    {
+        printf("No student found!");
+        return;
+    }
+
+    print_student(found_student);
+}
+
+STUDENT *search_student_by_name_or_id(char search_key[NAME_SIZE])
+{
+    // refresh data from file first
+    read_file();
+
+    STUDENT *temp = head;
+
+    while (temp != NULL)
+    {
+        if (strcmp(temp->student_info.name, search_key) == 0 || strcmp(temp->student_info.id, search_key) == 0)
+        {
+            printf("\nSearch found with key: %s\n", search_key);
+            return temp;
+        }
+        temp = temp->next;
+    }
+
+    return NULL;
+}
+
+STUDENT *find_maximum_avg()
+{
+    // refresh data from file first
+    read_file();
+
+    STUDENT *temp = head, *max;
+    max = temp->next;
+
+    while (temp != NULL)
+    {
+        if (max == NULL)
+        {
+            return temp;
+        }
+
+        if (max->course_info.avg < temp->course_info.avg)
+        {
+            max = temp;
+        }
+
+        temp = temp->next;
+    }
+
+    // release the max next record
+    // set max next element to NULL
+    // because we use only one record
+    release(max->next);
+    max->next = NULL;
+
+    return max;
+}
+
+int find_min_in_array(int *array)
+{
+    if (array == NULL)
+    {
+        return -1;
+    }
+
+    int min = array[0];
+    size_t size = sizeof(array) / sizeof(array[0]);
+
+    for (int i = 1; i < size; i++)
+    {
+        if (array[i] < min)
+        {
+            min = array[i];
+        }
+    }
+    return min;
+}
+
+// ISSUE: can't find all failed students
+// It's just return one record back
+STUDENT *find_failed_mark(int upper_mark)
+{
+    // refresh data from file first
+    read_file();
+
+    STUDENT *temp = head, *failed_students = NULL;
+
+    while (temp != NULL)
+    {
+        int min = find_min_in_array(temp->course_info.marks);
+        if (min < upper_mark)
+        {
+            if (failed_students == NULL)
+            {
+                failed_students = temp;
+                failed_students->next = NULL;
+            }
+            else
+            {
+                while (failed_students->next != NULL)
+                {
+                    failed_students = failed_students->next;
+                }
+                failed_students->next = temp;
+            }
+        }
+        temp = temp->next;
+    }
+
+    return failed_students;
+}
+
+void find_maximum()
+{
+    // refresh data from file first
+    read_file();
+
+    STUDENT *max_student = find_maximum_avg();
+    if (max_student == NULL)
+    {
+        printf("\nNo maximum student found!\n");
+        return;
+    }
+
+    printf("\nFind maximum avg was found with: %0.2f\n", max_student->course_info.avg);
+    print_student(max_student);
+}
+
+void find_failed()
+{
+    int upper_mark = 50;
+    STUDENT *failed_students = find_failed_mark(upper_mark);
+    if (failed_students == NULL)
+    {
+        printf("\nNo failed student found!\n");
+        return;
+    }
+
+    printf("\nFind the failed students that at least one mark less than %d\n", upper_mark);
+    print_student(failed_students);
+}
+
+void update_file()
+{
+    FILE *file;
+    file = fopen(FILE_STUDENT_DATA_PATH, "a");
+
+    char name[20];
+    char id[10];
+    char course_name[20];
+    int no_of_units;
+    int marks[MAX_NO_OF_UNITS];
+
+    printf("Enter student name: ");
+    scanf("%s", &name);
+
+    printf("Enter student id: ");
+    scanf("%s", &id);
+
+    printf("Enter course name: ");
+    scanf("%s", &course_name);
+
+again:
+    printf("Enter no of units: ");
+    scanf("%d", &no_of_units);
+
+    if (no_of_units > MAX_NO_OF_UNITS && no_of_units <= 0)
+    {
+        printf("you cannot input the units bigger than %d or less than 0\n", MAX_NO_OF_UNITS);
+        getchar();
+        goto again;
+    }
+
+    for (int i = 0; i < no_of_units; i++)
+    {
+        printf("Enter mark[%d]: ", i + 1);
+        scanf("%d", &marks[i]);
+    }
+
+    if (count() > 0)
+    {
+        fputs("\n", file);
+    }
+
+    fputs(name, file);
+    fputs("\n", file);
+    fputs(id, file);
+    fputs("\n", file);
+    fputs(course_name, file);
+    fputs("\n", file);
+    fprintf(file, "%d", no_of_units);
+
+    for (int i = 0; i < no_of_units; i++)
+    {
+        fputs("\n", file);
+        fprintf(file, "%d", marks[i]);
+    }
+
+    fclose(file);
+
+    printf("\nRecord saved successfully!");
+
+    // reload data into linked list again
+    read_file();
+}
+
+void read_file()
+{
+    // release nodes
+    // we need to clean up the memory
+    if (head != NULL)
+    {
+        STUDENT *temp;
+        while (head != NULL)
+        {
+            temp = head;
+            head = head->next;
+            free(temp);
+        }
+    }
 
     FILE *file;
     file = fopen(FILE_STUDENT_DATA_PATH, "r");
@@ -154,9 +460,9 @@ void read_student_to_data()
         exit(EXIT_FAILURE);
     }
 
-    char student_name[BUFFER_SIZE];
-    char student_id[BUFFER_SIZE];
-    char course_name[BUFFER_SIZE];
+    char student_name[20];
+    char student_id[10];
+    char course_name[20];
     int no_of_units;
     int marks[4];
 
@@ -194,26 +500,14 @@ void read_student_to_data()
 
         course_name[i] = '\0';
 
-        printf("Student Name: %s\n", student_name);
-        printf("Student ID: %s\n", student_id);
-        printf("Course Name: %s\n", course_name);
-        printf("No of units: %s", no);
-
         no_of_units = atoi(no);
         for (int j = 0; j < no_of_units; j++)
         {
-            char d[BUFFER_SIZE];
+            char mark[BUFFER_SIZE];
 
-            fgets(d, sizeof d, file);
-            sscanf(d, "%d", &marks[j]);
+            fgets(mark, sizeof mark, file);
+            sscanf(mark, "%d", &marks[j]);
         }
-
-        printf("Marks: [ ");
-        for (int x = 0; x < no_of_units; x++)
-        {
-            printf("%d ", marks[x]);
-        }
-        printf("]\n\n");
 
         // add into linked list
         add_student(student_name, student_id, course_name, no_of_units, marks);
@@ -222,54 +516,28 @@ void read_student_to_data()
     fclose(file);
 }
 
-int count()
-{
-    int n = 1;
-    STUDENT *temp;
-    temp = head;
-    if (head == NULL)
-    {
-        return 0;
-    }
-
-    while (temp->next != NULL)
-    {
-        n++;
-        temp = temp->next;
-    }
-
-    return n;
-}
-
-void search_student()
-{
-    printf("\nNot implement yet!");
-}
-
-void find_maximum()
-{
-    printf("\nNot implement yet!");
-}
-
-void find_failed()
-{
-    printf("\nNot implement yet!");
-}
-
-void update_file()
-{
-    FILE *file;
-    file = fopen(FILE_STUDENT_DATA_PATH, "a");
-    printf("\nNot implement yet!");
-}
-
-void read_file()
-{
-    printf("\nNot implement yet!");
-}
-
 void quite()
 {
     printf("\nGoodbye!");
     exit(EXIT_SUCCESS);
+}
+
+void release(STUDENT *data)
+{
+    if (data == NULL)
+    {
+        return;
+    }
+
+    // free the nodes
+    // because it can be use in memory
+    // we need to clear it first
+    // before we re-initailize the new data
+    STUDENT *temp;
+    while (data != NULL)
+    {
+        temp = data;
+        data = data->next;
+        free(temp);
+    }
 }

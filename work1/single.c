@@ -114,7 +114,7 @@ void display_students()
 
     if (student == NULL)
     {
-        printf("No student!");
+        printf("\nNo student!\n");
         return;
     }
 
@@ -308,6 +308,8 @@ int find_min_in_array(int *array)
     return min;
 }
 
+// ISSUE: can't find all failed students
+// It's just return one record back
 STUDENT *find_failed_mark(int upper_mark)
 {
     // refresh data from file first
@@ -318,7 +320,6 @@ STUDENT *find_failed_mark(int upper_mark)
     while (temp != NULL)
     {
         int min = find_min_in_array(temp->course_info.marks);
-
         if (min < upper_mark)
         {
             if (failed_students == NULL)
@@ -340,6 +341,7 @@ STUDENT *find_failed_mark(int upper_mark)
 
     return failed_students;
 }
+
 void find_maximum()
 {
     // refresh data from file first
