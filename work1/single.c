@@ -1,19 +1,22 @@
 #include "stdio.h"
 #include "stdlib.h"
 
-struct person_tag {
+struct person_tag
+{
     char name[20];
     char id[10];
 };
 
-struct course_tag {
+struct course_tag
+{
     char course_name[20];
     int no_of_units;
     int marks[4];
     float avg;
 };
 
-struct student_tag {
+struct student_tag
+{
     struct person_tag student_info;
     struct course_tag course_info;
     struct student_tag *next;
@@ -31,13 +34,20 @@ void quite();
 // util functions
 void display_menu();
 
-int main(void) {
-    printf("Welcome!");
+int main(void)
+{
+    // varibales
+    int selected;
 
-    printf("Goodbye!");
+    printf("Welcome!\n");
+
+    display_menu();
+
+    printf("\nGoodbye!");
 }
 
-void display_menu() {
+void display_menu()
+{
     printf("(1) Display students’ details\n");
     printf("(2) Search for a student’s mark\n");
     printf("(3) Find the details of student with the largest average\n");
