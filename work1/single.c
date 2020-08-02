@@ -282,7 +282,9 @@ int find_min_in_array(int *array)
     }
 
     int min = array[0];
-    for (int i = 1; i < sizeof array; i++)
+    size_t size = sizeof(array) / sizeof(array[0]);
+
+    for (int i = 1; i < size; i++)
     {
         if (array[i] < min)
         {
@@ -298,7 +300,9 @@ STUDENT *find_failed_mark(int upper_mark)
 
     while (temp != NULL)
     {
-        if (find_min_in_array(temp->course_info.marks) < upper_mark)
+        int min = find_min_in_array(temp->course_info.marks);
+
+        if (min < upper_mark)
         {
             if (failed_students == NULL)
             {
@@ -325,7 +329,7 @@ void find_maximum()
     STUDENT *max_student = find_maximum_avg();
     if (max_student == NULL)
     {
-        printf("No maximum student found!");
+        printf("\nNo maximum student found!\n");
         return;
     }
 
@@ -339,7 +343,7 @@ void find_failed()
     STUDENT *failed_students = find_failed_mark(upper_mark);
     if (failed_students == NULL)
     {
-        printf("No failed student found!");
+        printf("\nNo failed student found!\n");
         return;
     }
 
@@ -405,7 +409,7 @@ again:
 
     fclose(file);
 
-    printf("\nSaved");
+    printf("\nRecord saved successfully!");
 
     // reload data into linked list again
     read_file();
