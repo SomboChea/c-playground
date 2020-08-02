@@ -287,12 +287,23 @@ again:
     fclose(file);
 
     printf("\nSaved");
+
+    // reload data into linked list again
+    read_file();
 }
 
 void read_file()
 {
-    // init head to null
-    head = NULL;
+    // free the nodes
+    // because it can be use in memory
+    // we need to clear it first
+    // before we re-initailize the new data
+    STUDENT *temp;
+    while (head != NULL) {
+        temp = head;
+        head = head->next;
+        free(temp);
+    }
 
     FILE *file;
     file = fopen(FILE_STUDENT_DATA_PATH, "r");
