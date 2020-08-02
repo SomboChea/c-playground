@@ -41,7 +41,7 @@ void read_file();
 void quite();
 
 // Linked list functions
-void add_student(char *student_name, char *student_id, char *course_name, int no_of_units, int *marks);
+void add_student(char student_name[20], char student_id[10], char course_name[20], int no_of_units, int marks[4]);
 int count();
 
 // util functions
@@ -97,7 +97,42 @@ void print_welcome()
 void display_students()
 {
     printf("\n");
+
     read_student_to_data();
+
+    STUDENT *student;
+
+    student = head;
+
+    if (student == NULL)
+    {
+        printf("No student!");
+        return;
+    }
+
+    print_student(student);
+
+    while (student->next != NULL)
+    {
+        student = student->next;
+        print_student(student);
+    }
+}
+
+void print_student(STUDENT *student)
+{
+    printf("Student Name: %s\n", student->student_info.name);
+    printf("Student ID: %s\n", student->student_info.id);
+    printf("Course Name: %s\n", student->course_info.course_name);
+    printf("No of units: %d\n", student->course_info.no_of_units);
+
+    printf("Marks: [ ");
+    for (int i = 0; i < student->course_info.no_of_units; i++)
+    {
+        printf("%d ", student->course_info.marks[i]);
+    }
+    printf("]\n");
+    printf("Avg: %.2f\n", student->course_info.avg);
 }
 
 void display_menu()
@@ -110,20 +145,29 @@ void display_menu()
     printf("(6) Quit program\n\n");
 }
 
-void add_student(char *student_name, char *student_id, char *course_name, int no_of_units, int *marks)
+void add_student(char student_name[20], char student_id[10], char course_name[20], int no_of_units, int marks[4])
 {
     STUDENT *temp, *iterator;
     temp = (struct student_tag *)malloc(sizeof(struct student_tag));
-    PERSON info = {student_name, student_id};
-    COURSE course = {course_name, no_of_units, marks};
-    int sum = 0;
+    PERSON info;
+    strncpy(info.name, student_name, 20);
+    strncpy(info.id, student_id, 10);
+
+    COURSE course;
+    strncpy(course.course_name, course_name, 20);
+    course.no_of_units = no_of_units;
+    // memcpy(course.marks, marks);
+
+    float sum = 0;
     for (int i = 0; i < no_of_units; i++)
     {
+        course.marks[i] = marks[i];
         sum += marks[i];
     }
     course.avg = sum / no_of_units;
     temp->student_info = info;
     temp->course_info = course;
+
     // reference in head
     iterator = head;
 
@@ -157,9 +201,9 @@ void read_student_to_data()
         exit(EXIT_FAILURE);
     }
 
-    char student_name[BUFFER_SIZE];
-    char student_id[BUFFER_SIZE];
-    char course_name[BUFFER_SIZE];
+    char student_name[20];
+    char student_id[10];
+    char course_name[20];
     int no_of_units;
     int marks[4];
 
@@ -197,26 +241,26 @@ void read_student_to_data()
 
         course_name[i] = '\0';
 
-        printf("Student Name: %s\n", student_name);
-        printf("Student ID: %s\n", student_id);
-        printf("Course Name: %s\n", course_name);
-        printf("No of units: %s", no);
+        // printf("Student Name: %s\n", student_name);
+        // printf("Student ID: %s\n", student_id);
+        // printf("Course Name: %s\n", course_name);
+        // printf("No of units: %s", no);
 
         no_of_units = atoi(no);
         for (int j = 0; j < no_of_units; j++)
         {
-            char d[BUFFER_SIZE];
+            char mark[BUFFER_SIZE];
 
-            fgets(d, sizeof d, file);
-            sscanf(d, "%d", &marks[j]);
+            fgets(mark, sizeof mark, file);
+            sscanf(mark, "%d", &marks[j]);
         }
 
-        printf("Marks: [ ");
-        for (int x = 0; x < no_of_units; x++)
-        {
-            printf("%d ", marks[x]);
-        }
-        printf("]\n\n");
+        // printf("Marks: [ ");
+        // for (int x = 0; x < no_of_units; x++)
+        // {
+        //     printf("%d ", marks[x]);
+        // }
+        // printf("]\n\n");
 
         // add into linked list
         add_student(student_name, student_id, course_name, no_of_units, marks);
@@ -292,7 +336,7 @@ void update_file()
     {
         fputs("\n", file);
     }
-    
+
     fputs(name, file);
     fputs("\n", file);
     fputs(id, file);
