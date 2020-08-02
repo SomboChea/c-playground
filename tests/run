@@ -1,5 +1,4 @@
 #!/bin/bash
 
-rm -r work1
-
-gcc work1.c -o work1 && ./work1
+rm -r work1.bin
+gcc work1.c -o work1.bin && ./work1.bin

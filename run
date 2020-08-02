@@ -5,5 +5,6 @@
 # echo "run the program..."
 # ./program
 
-gcc work1/single.c -o single
-./single
+rm -r single.bin
+
+gcc work1/single.c -o single.bin && ./single.bin
