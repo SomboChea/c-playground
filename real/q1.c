@@ -3,7 +3,7 @@
 
 #define BUFFER_SIZE 128
 
-const char *FILE_STUDENT_DATA_PATH = "./data/students.txt";
+const char *FILE_STUDENT_DATA_PATH = "./students.txt";
 
 struct person_tag
 {
@@ -58,35 +58,32 @@ int main(void)
 
     display_menu();
 
-    while (1)
+    printf("Enter your option: ");
+    scanf("%d", &selected);
+
+    switch (selected)
     {
-        printf("Enter your option: ");
-        scanf("%d", &selected);
-        
-        switch (selected)
-        {
-        case 1:
-            display_students();
-            break;
-        case 2:
-            search_student();
-            break;
-        case 3:
-            find_maximum();
-            break;
-        case 4:
-            find_failed();
-            break;
-        case 5:
-            update_file();
-            break;
-        case 6:
-            quite();
-            break;
-        default:
-            printf("cannot find your option!");
-            break;
-        }
+    case 1:
+        display_students();
+        break;
+    case 2:
+        search_student();
+        break;
+    case 3:
+        find_maximum();
+        break;
+    case 4:
+        find_failed();
+        break;
+    case 5:
+        update_file();
+        break;
+    case 6:
+        quite();
+        break;
+    default:
+        printf("cannot find your option!");
+        break;
     }
 }
 
@@ -97,7 +94,6 @@ void print_welcome()
 
 void display_students()
 {
-    printf("\n");
     read_student_to_data();
 }
 
