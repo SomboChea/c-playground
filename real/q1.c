@@ -38,13 +38,14 @@ typedef struct student_tag STUDENT;
 void read_file();
 
 // util functions
-void display_menu();
+int menu();
 void print_welcome();
 void print_student(STUDENT *student);
 void release(STUDENT *data);
 int find_min_in_array(int *array);
 STUDENT *search_student_by_name_or_id(char search_key[NAME_SIZE]);
 STUDENT *find_maximum_avg();
+STUDENT *add_last_student(STUDENT *nodes, STUDENT *element);
 
 // core functions
 void display_students();
@@ -56,6 +57,7 @@ void quite();
 
 // Linked list functions
 void add_student(char student_name[20], char student_id[10], char course_name[20], int no_of_units, int marks[MAX_NO_OF_UNITS]);
+int count_elements(STUDENT *elements);
 int count();
 
 int main(void)
@@ -70,9 +72,7 @@ int main(void)
 
     while (1)
     {
-        display_menu();
-        printf("Enter your option: ");
-        scanf("%d", &selected);
+        selected = menu();
 
         switch (selected)
         {
@@ -123,6 +123,7 @@ void display_students()
 
 void print_student(STUDENT *student)
 {
+    int records_count = 0;
     printf("\n================ Student Details ================\n");
     while (student != NULL)
     {
@@ -140,7 +141,11 @@ void print_student(STUDENT *student)
         printf("]\n");
         printf("Avg: %.2f\n", student->course_info.avg);
         student = student->next;
+        records_count++;
     }
+
+    // output the records count
+    printf("\nRecords: %d has been loaded successfully!\n", records_count);
 
     // clean up the memory
     // after output the data
@@ -148,14 +153,19 @@ void print_student(STUDENT *student)
     release(student);
 }
 
-void display_menu()
+int menu()
 {
     printf("\n(1) Display students’ details\n");
     printf("(2) Search for a student’s mark\n");
     printf("(3) Find the details of student with the largest average\n");
     printf("(4) Find the details of failed students\n");
     printf("(5) Add new student to the record\n");
-    printf("(6) Quit program\n\n");
+    printf("(6) Quit program\n");
+
+    int choosen;
+    printf("\nEnter your option: ");
+    scanf("%d", &choosen);
+    return choosen;
 }
 
 void add_student(char student_name[20], char student_id[10], char course_name[20], int no_of_units, int marks[MAX_NO_OF_UNITS])
@@ -200,11 +210,11 @@ void add_student(char student_name[20], char student_id[10], char course_name[20
     }
 }
 
-int count()
+int count_elements(STUDENT *elements)
 {
     int n = 1;
     STUDENT *temp;
-    temp = head;
+    temp = elements;
     if (head == NULL)
     {
         return 0;
@@ -219,6 +229,11 @@ int count()
     return n;
 }
 
+int count()
+{
+    return count_elements(head);
+}
+
 void search_student()
 {
     char search_key[NAME_SIZE];
@@ -229,7 +244,7 @@ void search_student()
     STUDENT *found_student = search_student_by_name_or_id(search_key);
     if (found_student == NULL)
     {
-        printf("No student found!");
+        printf("\nNo student found!\n");
         return;
     }
 
@@ -248,6 +263,13 @@ STUDENT *search_student_by_name_or_id(char search_key[NAME_SIZE])
         if (strcmp(temp->student_info.name, search_key) == 0 || strcmp(temp->student_info.id, search_key) == 0)
         {
             printf("\nSearch found with key: %s\n", search_key);
+            // set the temp next to null
+            // and free up the memory
+            temp->next = NULL;
+            free(temp->next);
+
+            // return the current temp
+            // that found in current search
             return temp;
         }
         temp = temp->next;
@@ -308,6 +330,35 @@ int find_min_in_array(int *array)
     return min;
 }
 
+STUDENT *add_last_student(STUDENT *nodes, STUDENT *element)
+{
+    STUDENT *temp = nodes, *node;
+    node = (struct student_tag *)malloc(sizeof(struct student_tag));
+    node->student_info = element->student_info;
+    node->course_info = element->course_info;
+    node->next = NULL;
+
+    if (nodes == NULL)
+    {
+        nodes = node;
+
+        return nodes;
+    }
+
+    // store current as tempo
+    // ref for nodes
+    temp = nodes;
+
+    while (temp->next != NULL)
+    {
+        temp = temp->next;
+    }
+
+    temp->next = node;
+
+    return nodes;
+}
+
 // ISSUE: can't find all failed students
 // It's just return one record back
 STUDENT *find_failed_mark(int upper_mark)
@@ -315,29 +366,30 @@ STUDENT *find_failed_mark(int upper_mark)
     // refresh data from file first
     read_file();
 
+    printf("Count elements: %d\n", count());
+
     STUDENT *temp = head, *failed_students = NULL;
+
+    int count = count_elements(temp);
+    printf("Temp count elements: %d", count);
+
+    int run_count = 0;
 
     while (temp != NULL)
     {
+        run_count++;
+
         int min = find_min_in_array(temp->course_info.marks);
         if (min < upper_mark)
         {
-            if (failed_students == NULL)
-            {
-                failed_students = temp;
-                failed_students->next = NULL;
-            }
-            else
-            {
-                while (failed_students->next != NULL)
-                {
-                    failed_students = failed_students->next;
-                }
-                failed_students->next = temp;
-            }
+            printf("\nRun min: %d\n", min);
+            failed_students = add_last_student(failed_students, temp);
         }
+
         temp = temp->next;
     }
+
+    printf("\nRun count: %d", run_count);
 
     return failed_students;
 }
@@ -398,7 +450,7 @@ again:
 
     if (no_of_units > MAX_NO_OF_UNITS && no_of_units <= 0)
     {
-        printf("you cannot input the units bigger than %d or less than 0\n", MAX_NO_OF_UNITS);
+        printf("\nyou cannot input the units bigger than %d or less than 0\n", MAX_NO_OF_UNITS);
         getchar();
         goto again;
     }
@@ -430,7 +482,7 @@ again:
 
     fclose(file);
 
-    printf("\nRecord saved successfully!");
+    printf("\nRecord saved successfully!\n");
 
     // reload data into linked list again
     read_file();
