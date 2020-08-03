@@ -56,6 +56,7 @@ void quite();
 
 // Linked list functions
 void add_student(char student_name[20], char student_id[10], char course_name[20], int no_of_units, int marks[MAX_NO_OF_UNITS]);
+int count_elements(STUDENT *elements);
 int count();
 
 int main(void)
@@ -200,11 +201,11 @@ void add_student(char student_name[20], char student_id[10], char course_name[20
     }
 }
 
-int count()
+int count_elements(STUDENT *elements)
 {
     int n = 1;
     STUDENT *temp;
-    temp = head;
+    temp = elements;
     if (head == NULL)
     {
         return 0;
@@ -217,6 +218,11 @@ int count()
     }
 
     return n;
+}
+
+int count()
+{
+    return count_elements(head);
 }
 
 void search_student()
@@ -315,7 +321,12 @@ STUDENT *find_failed_mark(int upper_mark)
     // refresh data from file first
     read_file();
 
+    printf("Count elements: %d\n", count());
+
     STUDENT *temp = head, *failed_students = NULL;
+
+    int count = count_elements(temp);
+    printf("Temp count elements: %d", count);
 
     while (temp != NULL)
     {
