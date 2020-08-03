@@ -485,7 +485,10 @@ again:
     printf("\nRecord saved successfully!\n");
 
     // reload data into linked list again
-    read_file();
+    // read_file();
+
+    // show back the all results
+    display_students();
 }
 
 void read_file()
