@@ -45,6 +45,7 @@ void release(STUDENT *data);
 int find_min_in_array(int *array);
 STUDENT *search_student_by_name_or_id(char search_key[NAME_SIZE]);
 STUDENT *find_maximum_avg();
+STUDENT *add_last_student(STUDENT *nodes, STUDENT *element);
 
 // core functions
 void display_students();
@@ -124,6 +125,7 @@ void display_students()
 
 void print_student(STUDENT *student)
 {
+    int records_count = 0;
     printf("\n================ Student Details ================\n");
     while (student != NULL)
     {
@@ -141,8 +143,12 @@ void print_student(STUDENT *student)
         printf("]\n");
         printf("Avg: %.2f\n", student->course_info.avg);
         student = student->next;
+        records_count++;
     }
 
+    // output the records count
+    printf("\nRecords: %d has been loaded successfully!\n", records_count);
+    
     // clean up the memory
     // after output the data
     // because we don;t need it anymore after output
@@ -314,6 +320,35 @@ int find_min_in_array(int *array)
     return min;
 }
 
+STUDENT *add_last_student(STUDENT *nodes, STUDENT *element)
+{
+    STUDENT *temp = nodes, *node;
+    node = (struct student_tag*) malloc(sizeof(struct student_tag));
+    node->student_info = element->student_info;
+    node->course_info = element->course_info;
+    node->next = NULL;
+
+    if (nodes == NULL)
+    {
+        nodes = node;
+
+        return nodes;
+    }
+
+    // store current as tempo
+    // ref for nodes
+    temp = nodes;
+
+    while (temp->next != NULL)
+    {
+        temp = temp->next;
+    }
+
+    temp->next = node;
+
+    return nodes;
+}
+
 // ISSUE: can't find all failed students
 // It's just return one record back
 STUDENT *find_failed_mark(int upper_mark)
@@ -328,27 +363,23 @@ STUDENT *find_failed_mark(int upper_mark)
     int count = count_elements(temp);
     printf("Temp count elements: %d", count);
 
+    int run_count = 0;
+
     while (temp != NULL)
     {
+        run_count++;
+
         int min = find_min_in_array(temp->course_info.marks);
         if (min < upper_mark)
         {
-            if (failed_students == NULL)
-            {
-                failed_students = temp;
-                failed_students->next = NULL;
-            }
-            else
-            {
-                while (failed_students->next != NULL)
-                {
-                    failed_students = failed_students->next;
-                }
-                failed_students->next = temp;
-            }
+            printf("\nRun min: %d\n", min);
+            failed_students = add_last_student(failed_students, temp);
         }
+
         temp = temp->next;
     }
+
+    printf("\nRun count: %d", run_count);
 
     return failed_students;
 }
