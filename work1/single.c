@@ -38,7 +38,7 @@ typedef struct student_tag STUDENT;
 void read_file();
 
 // util functions
-void display_menu();
+int menu();
 void print_welcome();
 void print_student(STUDENT *student);
 void release(STUDENT *data);
@@ -72,9 +72,7 @@ int main(void)
 
     while (1)
     {
-        display_menu();
-        printf("Enter your option: ");
-        scanf("%d", &selected);
+        selected = menu();
 
         switch (selected)
         {
@@ -155,14 +153,19 @@ void print_student(STUDENT *student)
     release(student);
 }
 
-void display_menu()
+int menu()
 {
     printf("\n(1) Display students’ details\n");
     printf("(2) Search for a student’s mark\n");
     printf("(3) Find the details of student with the largest average\n");
     printf("(4) Find the details of failed students\n");
     printf("(5) Add new student to the record\n");
-    printf("(6) Quit program\n\n");
+    printf("(6) Quit program\n");
+
+    int choosen;
+    printf("\nEnter your option: ");
+    scanf("%d", &choosen);
+    return choosen;
 }
 
 void add_student(char student_name[20], char student_id[10], char course_name[20], int no_of_units, int marks[MAX_NO_OF_UNITS])
@@ -447,7 +450,7 @@ again:
 
     if (no_of_units > MAX_NO_OF_UNITS && no_of_units <= 0)
     {
-        printf("you cannot input the units bigger than %d or less than 0\n", MAX_NO_OF_UNITS);
+        printf("\nyou cannot input the units bigger than %d or less than 0\n", MAX_NO_OF_UNITS);
         getchar();
         goto again;
     }
@@ -479,7 +482,7 @@ again:
 
     fclose(file);
 
-    printf("\nRecord saved successfully!");
+    printf("\nRecord saved successfully!\n");
 
     // reload data into linked list again
     read_file();
