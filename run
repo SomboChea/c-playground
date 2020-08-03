@@ -7,4 +7,4 @@
 
 rm -r single.bin
 
-gcc work1/single.c -o single.bin && ./single.bin
+gcc work1/q1.c -o single.bin && ./single.bin
