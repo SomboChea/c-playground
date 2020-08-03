@@ -148,7 +148,7 @@ void print_student(STUDENT *student)
 
     // output the records count
     printf("\nRecords: %d has been loaded successfully!\n", records_count);
-    
+
     // clean up the memory
     // after output the data
     // because we don;t need it anymore after output
@@ -241,7 +241,7 @@ void search_student()
     STUDENT *found_student = search_student_by_name_or_id(search_key);
     if (found_student == NULL)
     {
-        printf("No student found!");
+        printf("\nNo student found!\n");
         return;
     }
 
@@ -260,6 +260,13 @@ STUDENT *search_student_by_name_or_id(char search_key[NAME_SIZE])
         if (strcmp(temp->student_info.name, search_key) == 0 || strcmp(temp->student_info.id, search_key) == 0)
         {
             printf("\nSearch found with key: %s\n", search_key);
+            // set the temp next to null
+            // and free up the memory
+            temp->next = NULL;
+            free(temp->next);
+
+            // return the current temp
+            // that found in current search
             return temp;
         }
         temp = temp->next;
@@ -323,7 +330,7 @@ int find_min_in_array(int *array)
 STUDENT *add_last_student(STUDENT *nodes, STUDENT *element)
 {
     STUDENT *temp = nodes, *node;
-    node = (struct student_tag*) malloc(sizeof(struct student_tag));
+    node = (struct student_tag *)malloc(sizeof(struct student_tag));
     node->student_info = element->student_info;
     node->course_info = element->course_info;
     node->next = NULL;
