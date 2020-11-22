@@ -1,6 +1,6 @@
-# SBN C-Assigement
+# Playground C-Assigement
 
-- [ ] Student Details
-- [ ] Linked List
-- [ ] Book Data Store
+- [x] Student Details
+- [x] Linked List
+- [x] Book Data Store
 - [ ] Etc.
